@@ -24,10 +24,10 @@ package org.rookit.test;
 import org.rookit.RookitTest;
 import org.rookit.utils.log.AbstractLogCategory;
 import org.rookit.utils.log.LogManager;
-import org.rookit.utils.log.validator.Validator;
+import org.rookit.utils.log.validator.AbstractValidator;
 
 @SuppressWarnings("javadoc")
-public final class TestValidator extends Validator {
+public final class TestValidator extends AbstractValidator {
 
     private static final TestValidator SINGLETON = new TestValidator(new AbstractLogCategory() {
 
