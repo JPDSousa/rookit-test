@@ -21,10 +21,10 @@
  ******************************************************************************/
 package org.rookit.test;
 
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.rookit.test.preconditions.TestPreconditions.assure;
-
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("javadoc")
 public interface ObjectTest<T> extends RookitTest<T> {
@@ -44,13 +44,13 @@ public interface ObjectTest<T> extends RookitTest<T> {
     @Test
     default void testHashCode() {
         final T testResource1 = getTestResource();
-        final T testResrouce2 = createTestResource();
-        assure().isEquals(testResource1, testResrouce2, "test resources");
+        final T testResource2 = createTestResource();
+        assure().isEquals(testResource1, testResource2, "test resources");
 
         assertThat(testResource1.hashCode())
                 .as("The self hash code")
                 .isEqualTo(testResource1.hashCode())
-                .isEqualTo(testResrouce2.hashCode());
+                .isEqualTo(testResource2.hashCode());
     }
 
     @Test

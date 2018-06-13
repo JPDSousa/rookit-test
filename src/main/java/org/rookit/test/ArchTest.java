@@ -19,20 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+package org.rookit.test;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.library.GeneralCodingRules;
-
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 import org.rookit.test.utils.ArchUtils;
 
+import java.util.Arrays;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+
 @SuppressWarnings("javadoc")
 public interface ArchTest {
+    
+    // TODO add test to forbide calls to StreamEx::toImmutable...
 
     JavaClasses getJavaClasses();
 

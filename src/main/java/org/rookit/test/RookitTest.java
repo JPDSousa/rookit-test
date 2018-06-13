@@ -21,9 +21,61 @@
  ******************************************************************************/
 package org.rookit.test;
 
+import com.google.common.collect.ImmutableList;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.function.Executable;
+
+import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
 @SuppressWarnings("javadoc")
 public interface RookitTest<T> {
-    
+
+    default Collection<DynamicTest> testNonPositiveIntegerArgument(final IntConsumer method) {
+        return ImmutableList.<DynamicTest>builder()
+                .add(dynamicTest("-10", () -> assertThatThrownBy(() -> method.accept(-10))
+                        .as("This method is accepting non positive numbers.")
+                        .isInstanceOf(IllegalArgumentException.class)))
+                .add(dynamicTest("-1", () -> assertThatThrownBy(() -> method.accept(-1))
+                        .as("This method is accepting non positive numbers.")
+                        .isInstanceOf(IllegalArgumentException.class)))
+                .add(dynamicTest("0", () -> assertThatThrownBy(() -> method.accept(0))
+                        .as("This method is accepting non positive numbers.")
+                        .isInstanceOf(IllegalArgumentException.class)))
+                .build();
+    }
+
+    default Collection<DynamicTest> testBlankStringArgument(final Consumer<String> method) {
+        final Executable executable = () -> assertThatThrownBy(() -> method.accept(" "))
+                .as("This method is accepting a blank string")
+                .isInstanceOf(IllegalArgumentException.class);
+        return ImmutableList.<DynamicTest>builder()
+                .addAll(testEmptyStringArgument(method))
+                .add(dynamicTest("Blank String", executable))
+                .build();
+    }
+
+    default Collection<DynamicTest> testEmptyStringArgument(final Consumer<String> method) {
+        final Executable executable = () -> assertThatThrownBy(() -> method.accept(""))
+                .as("This method is accepting an empty string as a value")
+                .isInstanceOf(IllegalArgumentException.class);
+        return ImmutableList.<DynamicTest>builder()
+                .addAll(testNullArgument(method))
+                .add(dynamicTest("Empty String", executable))
+                .build();
+    }
+
+    default Collection<DynamicTest> testNullArgument(final Consumer<?> method) {
+        final Executable executable = () -> assertThatThrownBy(() -> method.accept(null))
+                .as("This method is accepting null as a value")
+                .isInstanceOf(IllegalArgumentException.class);
+        return ImmutableList.of(dynamicTest("Null", executable));
+    }
+
     T getTestResource();
     
     T createTestResource();

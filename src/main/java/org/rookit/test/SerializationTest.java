@@ -21,23 +21,18 @@
  ******************************************************************************/
 package org.rookit.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import org.junit.jupiter.api.Test;
+
+import java.io.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("javadoc")
 public interface SerializationTest<T extends Serializable> extends ObjectTest<T> {
 
-    public static final Gson GSON = new GsonBuilder().create();
+    Gson GSON = new GsonBuilder().create();
     
     Class<T> getTestResourceType();
 
