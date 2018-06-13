@@ -19,7 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+
 package org.rookit.test.preconditions;
+
+import java.util.function.Supplier;
 
 import org.apache.logging.log4j.Logger;
 import org.rookit.test.TestValidator;
@@ -41,6 +44,10 @@ public final class TestPreconditions {
     
     public static ObjectValidator assure() {
         return ASSURANCE;
+    }
+    
+    public static Supplier<TestException> fail(final String message) {
+        return () -> new TestException(message);
     }
 
 }
