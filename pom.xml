@@ -28,6 +28,10 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 		</dependency>
@@ -93,6 +97,11 @@
 				<artifactId>junit-jupiter-engine</artifactId>
 				<version>5.1.1</version>
 			</dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>5.1.1</version>
+            </dependency>
 			<dependency>
 				<groupId>io.github.glytching</groupId>
 				<artifactId>junit-extensions</artifactId>
