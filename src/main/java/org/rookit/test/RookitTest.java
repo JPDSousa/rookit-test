@@ -38,20 +38,20 @@ public interface RookitTest<T> {
     default Collection<DynamicTest> testNonPositiveIntegerArgument(final IntConsumer method) {
         return ImmutableList.<DynamicTest>builder()
                 .add(dynamicTest("-10", () -> assertThatThrownBy(() -> method.accept(-10))
-                        .as("This method is accepting non positive numbers.")
+                        .as("This field is accepting non positive numbers.")
                         .isInstanceOf(IllegalArgumentException.class)))
                 .add(dynamicTest("-1", () -> assertThatThrownBy(() -> method.accept(-1))
-                        .as("This method is accepting non positive numbers.")
+                        .as("This field is accepting non positive numbers.")
                         .isInstanceOf(IllegalArgumentException.class)))
                 .add(dynamicTest("0", () -> assertThatThrownBy(() -> method.accept(0))
-                        .as("This method is accepting non positive numbers.")
+                        .as("This field is accepting non positive numbers.")
                         .isInstanceOf(IllegalArgumentException.class)))
                 .build();
     }
 
     default Collection<DynamicTest> testBlankStringArgument(final Consumer<String> method) {
         final Executable executable = () -> assertThatThrownBy(() -> method.accept(" "))
-                .as("This method is accepting a blank string")
+                .as("This field is accepting a blank string")
                 .isInstanceOf(IllegalArgumentException.class);
         return ImmutableList.<DynamicTest>builder()
                 .addAll(testEmptyStringArgument(method))
@@ -61,7 +61,7 @@ public interface RookitTest<T> {
 
     default Collection<DynamicTest> testEmptyStringArgument(final Consumer<String> method) {
         final Executable executable = () -> assertThatThrownBy(() -> method.accept(""))
-                .as("This method is accepting an empty string as a value")
+                .as("This field is accepting an empty string as a value")
                 .isInstanceOf(IllegalArgumentException.class);
         return ImmutableList.<DynamicTest>builder()
                 .addAll(testNullArgument(method))
@@ -71,7 +71,7 @@ public interface RookitTest<T> {
 
     default Collection<DynamicTest> testNullArgument(final Consumer<?> method) {
         final Executable executable = () -> assertThatThrownBy(() -> method.accept(null))
-                .as("This method is accepting null as a value")
+                .as("This field is accepting null as a value")
                 .isInstanceOf(IllegalArgumentException.class);
         return ImmutableList.of(dynamicTest("Null", executable));
     }

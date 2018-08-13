@@ -27,6 +27,7 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import io.github.glytching.junit.extension.folder.TemporaryFolder;
 import io.github.glytching.junit.extension.folder.TemporaryFolderExtension;
+import org.apache.logging.log4j.Logger;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
@@ -50,6 +51,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public abstract class AbstractUnitTest<T> implements ObjectTest<T>, ArchTest {
 
     protected static final Validator VALIDATOR = TestValidator.getSingleton();
+    private static final Logger logger = VALIDATOR.getLogger(AbstractUnitTest.class);
+
     public static final Object[] EMTPY_ARGUMENTS = new Object[0];
 
     public static <E> void testCollectionOps(final CollectionOps<E> collectionOps, final Supplier<E> itemSupplier) {
@@ -60,6 +63,7 @@ public abstract class AbstractUnitTest<T> implements ObjectTest<T>, ArchTest {
 
     protected T testResource;
     private JavaClasses javaClass;
+    private boolean setupAttributes;
 
     @Override
     public JavaClasses getJavaClasses() {
@@ -70,6 +74,21 @@ public abstract class AbstractUnitTest<T> implements ObjectTest<T>, ArchTest {
     public T getTestResource() {
         return this.testResource;
     }
+
+    protected void setupAttributes() {
+        logger.trace("No attributes to setup");
+    }
+
+    @Override
+    public final T createTestResource() {
+        if (!this.setupAttributes) {
+            setupAttributes();
+            this.setupAttributes = true;
+        }
+        return doCreateTestResource();
+    }
+
+    protected abstract T doCreateTestResource();
 
     @BeforeEach
     public final void setupGuineaPig() {
@@ -95,7 +114,7 @@ public abstract class AbstractUnitTest<T> implements ObjectTest<T>, ArchTest {
                 final DynamicTest returnValueTest = dynamicTest(String.format("Return value of %s cannot be null",
                         method.name()),
                         () -> assertThat(returnValue)
-                                .as("Invoking method %s of class %s does not return null",
+                                .as("Invoking field %s of class %s does not return null",
                                         method.name(), className)
                                 .isNotNull());
                 tests.add(returnValueTest);
