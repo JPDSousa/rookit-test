@@ -26,22 +26,19 @@ import com.google.inject.Inject;
 
 import java.util.Random;
 
-final class ByteArrayGenerator extends AbstractGenerator<byte[]> {
-
-    private static final short MAX_BYTES = 128;
+final class BooleanGeneratorImpl extends AbstractGenerator<Boolean> implements BooleanGenerator {
 
     private final Random random;
 
     @Inject
-    ByteArrayGenerator(final Random random) {
+    BooleanGeneratorImpl(final Random random) {
         this.random = random;
     }
 
+    @SuppressWarnings("UnnecessaryBoxing")
     @Override
-    public byte[] createRandom() {
-        final byte[] bytes = new byte[MAX_BYTES];
-        this.random.nextBytes(bytes);
-        return bytes;
+    public Boolean createRandom() {
+        return Boolean.valueOf(createRandomBoolean());
     }
 
     @Override
@@ -49,5 +46,15 @@ final class ByteArrayGenerator extends AbstractGenerator<byte[]> {
         return MoreObjects.toStringHelper(this)
                 .add("random", this.random)
                 .toString();
+    }
+
+    @Override
+    public boolean createRandomBoolean() {
+        return this.random.nextBoolean();
+    }
+
+    @Override
+    public boolean getAsBoolean() {
+        return createRandomBoolean();
     }
 }

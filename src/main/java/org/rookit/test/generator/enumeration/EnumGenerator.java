@@ -19,56 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test.generator;
+package org.rookit.test.generator.enumeration;
 
 import com.google.common.base.MoreObjects;
-import com.google.inject.Inject;
-import org.rookit.test.generator.guice.MinYear;
-import org.rookit.test.generator.number.IntegerGenerator;
+import org.rookit.test.generator.AbstractGenerator;
 
 import javax.annotation.Generated;
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
 import java.util.Objects;
+import java.util.Random;
 
 @SuppressWarnings("javadoc")
-final class PastLocalDateGenerator extends AbstractGenerator<LocalDate> {
+public final class EnumGenerator<T extends Enum<T>> extends AbstractGenerator<T> {
 
+    private final Class<T> clazz;
+    private final Random random;
 
-    private final IntegerGenerator integerGenerator;
-    private final Generator<Month> monthGenerator;
-    private final int minYear;
-
-    @Inject
-    PastLocalDateGenerator(final IntegerGenerator integerGenerator,
-                           final Generator<Month> monthGenerator,
-                           @MinYear final int minYear) {
-        this.integerGenerator = integerGenerator;
-        this.monthGenerator = monthGenerator;
-        this.minYear = minYear;
+    public EnumGenerator(final Random random, final Class<T> clazz) {
+        this.random = random;
+        this.clazz = clazz;
     }
 
     @Override
-    public LocalDate createRandom() {
-        final int maxYear = Year.now().getValue();
-        final int year = this.integerGenerator.createRandomInteger(this.minYear, maxYear);
-        final boolean isLeap = Year.isLeap(year);
+    public T createRandom() {
+        final T[] values = this.clazz.getEnumConstants();
+        final int index = this.random.nextInt(values.length);
 
-        final Month month = this.monthGenerator.createRandom();
-        final int dayOfMonth = this.integerGenerator.createRandomInteger(1, month.length(isLeap));
-        return LocalDate.of(year, month, dayOfMonth);
+        return values[index];
     }
 
     @Override
     @Generated(value = "GuavaEclipsePlugin")
     public boolean equals(final Object object) {
-        if (object instanceof PastLocalDateGenerator) {
+        if (object instanceof EnumGenerator) {
             if (!super.equals(object)) {
                 return false;
             }
-            final PastLocalDateGenerator that = (PastLocalDateGenerator) object;
-            return Objects.equals(this.monthGenerator, that.monthGenerator);
+            final EnumGenerator<?> that = (EnumGenerator<?>) object;
+            return Objects.equals(this.clazz, that.clazz);
         }
         return false;
     }
@@ -77,15 +64,14 @@ final class PastLocalDateGenerator extends AbstractGenerator<LocalDate> {
     @Override
     @Generated(value = "GuavaEclipsePlugin")
     public int hashCode() {
-        return Objects.hash(super.hashCode(), this.monthGenerator);
+        return Objects.hash(super.hashCode(), this.clazz);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("integerGenerator", this.integerGenerator)
-                .add("monthGenerator", this.monthGenerator)
-                .add("minYear", this.minYear)
+                .add("clazz", this.clazz)
+                .add("random", this.random)
                 .toString();
     }
 }

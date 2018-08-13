@@ -19,14 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test.generator;
+package org.rookit.test.generator.number;
+
+import org.rookit.test.AbstractUnitTest;
+import org.rookit.test.junit.categories.UnitTest;
+
+import java.util.Random;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("javadoc")
-public class DoubleGeneratorTest extends AbstractGeneratorTest<DoubleGenerator> {
+@UnitTest
+public class IntegerGeneratorImplTest extends AbstractUnitTest<IntegerGeneratorImpl>
+        implements IntegerGeneratorTest<IntegerGeneratorImpl> {
+
+    private final Random random = mock(Random.class);
 
     @Override
-    protected Class<DoubleGenerator> getTestClass() {
-        return DoubleGenerator.class;
+    protected IntegerGeneratorImpl doCreateTestResource() {
+        return new IntegerGeneratorImpl(this.random);
     }
 
+    @Override
+    public void verifyCreateRandomDependencies() {
+        verify(this.random).nextInt();
+    }
 }

@@ -21,27 +21,27 @@
  ******************************************************************************/
 package org.rookit.test.generator;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.mockito.Mockito;
+import org.rookit.test.AbstractUnitTest;
+import org.rookit.test.junit.categories.UnitTest;
+import org.rookit.test.generator.number.LongGenerator;
 
-import java.time.Duration;
-
-import org.junit.jupiter.api.RepeatedTest;
+import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("javadoc")
-public class DurationGeneratorTest extends AbstractGeneratorTest<DurationGenerator> {
+@UnitTest
+public class DurationGeneratorTest extends AbstractUnitTest<DurationGenerator>
+        implements GeneratorTest<DurationGenerator> {
 
-    @RepeatedTest(CONFIDENCE_THRESHOLD)
-    public final void testGreaterThanZero() {
-        final Duration duration = this.testResource.createRandom();
+    private final LongGenerator longGenerator = Mockito.mock(LongGenerator.class);
 
-        assertThat(duration)
-                .as("The generated duration")
-                .isGreaterThan(Duration.ZERO);
+    @Override
+    protected DurationGenerator doCreateTestResource() {
+        return new DurationGenerator(this.longGenerator);
     }
 
     @Override
-    protected Class<DurationGenerator> getTestClass() {
-        return DurationGenerator.class;
+    public void verifyCreateRandomDependencies() {
+        verify(this.longGenerator).createRandomLong();
     }
-
 }

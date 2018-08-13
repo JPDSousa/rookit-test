@@ -23,25 +23,25 @@ package org.rookit.test.generator;
 
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
+import org.rookit.test.generator.guice.Positive;
+import org.rookit.test.generator.number.LongGenerator;
 
+import javax.annotation.Generated;
 import java.time.Duration;
 import java.util.Objects;
 
-import javax.annotation.Generated;
+final class DurationGenerator extends AbstractGenerator<Duration> {
 
-class DurationGenerator extends AbstractGenerator<Duration> {
-
-    private final Generator<Long> longGenerator;
+    private final LongGenerator longGenerator;
 
     @Inject
-    private DurationGenerator(final Generator<Long> longGenerator) {
-        super();
+    DurationGenerator(@Positive final LongGenerator longGenerator) {
         this.longGenerator = longGenerator;
     }
 
     @Override
     public Duration createRandom() {
-        return Duration.ofMillis(this.longGenerator.createRandom().longValue() + 1);
+        return Duration.ofMillis(this.longGenerator.createRandomLong());
     }
 
     @Override

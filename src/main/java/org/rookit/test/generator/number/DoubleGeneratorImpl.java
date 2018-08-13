@@ -19,14 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test.generator;
+package org.rookit.test.generator.number;
 
-@SuppressWarnings("javadoc")
-public class ShortGeneratorTest extends AbstractGeneratorTest<ShortGenerator> {
+import com.google.common.base.MoreObjects;
+import com.google.inject.Inject;
+import org.rookit.test.generator.AbstractGenerator;
 
-    @Override
-    protected Class<ShortGenerator> getTestClass() {
-        return ShortGenerator.class;
+import java.util.Random;
+
+final class DoubleGeneratorImpl extends AbstractGenerator<Double> implements DoubleGenerator {
+
+    private final Random random;
+
+    @Inject
+    DoubleGeneratorImpl(final Random random) {
+        this.random = random;
     }
 
+    @SuppressWarnings("AutoBoxing")
+    @Override
+    public Double createRandom() {
+        return createRandomDouble();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("random", this.random)
+                .toString();
+    }
+
+    @Override
+    public double createRandomDouble() {
+        return this.random.nextDouble();
+    }
+
+    @Override
+    public double getAsDouble() {
+        return createRandomDouble();
+    }
 }

@@ -21,33 +21,28 @@
  ******************************************************************************/
 package org.rookit.test.generator;
 
-import com.google.common.base.MoreObjects;
-import com.google.inject.Inject;
+import org.rookit.test.AbstractUnitTest;
+import org.rookit.test.junit.categories.UnitTest;
 
 import java.util.Random;
 
-final class ByteArrayGenerator extends AbstractGenerator<byte[]> {
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-    private static final short MAX_BYTES = 128;
+@SuppressWarnings("javadoc")
+@UnitTest
+public class BooleanGeneratorImplTest extends AbstractUnitTest<BooleanGeneratorImpl>
+        implements BooleanGeneratorTest<BooleanGeneratorImpl> {
 
-    private final Random random;
+    private final Random random = mock(Random.class);
 
-    @Inject
-    ByteArrayGenerator(final Random random) {
-        this.random = random;
+    @Override
+    protected BooleanGeneratorImpl doCreateTestResource() {
+        return new BooleanGeneratorImpl(this.random);
     }
 
     @Override
-    public byte[] createRandom() {
-        final byte[] bytes = new byte[MAX_BYTES];
-        this.random.nextBytes(bytes);
-        return bytes;
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("random", this.random)
-                .toString();
+    public void verifyCreateRandomDependencies() {
+        verify(this.random).nextBoolean();
     }
 }

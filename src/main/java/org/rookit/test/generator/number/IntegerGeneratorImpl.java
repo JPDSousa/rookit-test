@@ -19,62 +19,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test.generator;
+package org.rookit.test.generator.number;
 
 import com.google.common.base.MoreObjects;
+import com.google.inject.Inject;
+import org.rookit.test.generator.AbstractGenerator;
 
-import java.util.Objects;
 import java.util.Random;
 
-import javax.annotation.Generated;
-
 @SuppressWarnings("javadoc")
-public class EnumGenerator<T extends Enum<T>> extends AbstractGenerator<T> {
+final class IntegerGeneratorImpl extends AbstractGenerator<Integer> implements IntegerGenerator {
 
-    private final Class<T> clazz;
     private final Random random;
 
-    public EnumGenerator(final Random random, final Class<T> clazz) {
-        super();
+    @Inject
+    IntegerGeneratorImpl(final Random random) {
         this.random = random;
-        this.clazz = clazz;
+    }
+
+    @SuppressWarnings("AutoBoxing")
+    @Override
+    public Integer createRandom() {
+        return createRandomInteger();
     }
 
     @Override
-    public T createRandom() {
-        final T[] values = this.clazz.getEnumConstants();
-        final int index = this.random.nextInt(values.length);
-
-        return values[index];
+    public int createRandomInteger() {
+        return this.random.nextInt();
     }
 
     @Override
-    @Generated(value = "GuavaEclipsePlugin")
-    public boolean equals(final Object object) {
-        if (object instanceof EnumGenerator) {
-            if (!super.equals(object)) {
-                return false;
-            }
-            final EnumGenerator<?> that = (EnumGenerator<?>) object;
-            return Objects.equals(this.clazz, that.clazz);
-        }
-        return false;
-    }
-
-    @SuppressWarnings("boxing")
-    @Override
-    @Generated(value = "GuavaEclipsePlugin")
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), this.clazz);
+    public int createRandomInteger(final int min, final int max) {
+        return min + this.random.nextInt(max - min);
     }
 
     @Override
-    @Generated(value = "GuavaEclipsePlugin")
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("super", super.toString())
-                .add("clazz", this.clazz)
+                .add("random", this.random)
                 .toString();
     }
 
+    @Override
+    public int getAsInt() {
+        return createRandomInteger();
+    }
 }

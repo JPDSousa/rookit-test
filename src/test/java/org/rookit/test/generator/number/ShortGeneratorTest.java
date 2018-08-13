@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2018 Joao Sousa
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,35 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test.generator;
+package org.rookit.test.generator.number;
 
-import com.google.common.base.MoreObjects;
-import com.google.inject.Inject;
+import org.junit.jupiter.api.Test;
+import org.rookit.test.generator.GeneratorTest;
 
-import java.util.Random;
+public interface ShortGeneratorTest<T extends ShortGenerator> extends GeneratorTest<T> {
 
-final class ByteArrayGenerator extends AbstractGenerator<byte[]> {
-
-    private static final short MAX_BYTES = 128;
-
-    private final Random random;
-
-    @Inject
-    ByteArrayGenerator(final Random random) {
-        this.random = random;
+    @Test
+    default void testCreateRandomShort() {
+        getTestResource().createRandomShort();
+        verifyCreateRandomDependencies();
     }
 
-    @Override
-    public byte[] createRandom() {
-        final byte[] bytes = new byte[MAX_BYTES];
-        this.random.nextBytes(bytes);
-        return bytes;
+    @Test
+    default void testGetAsShort() {
+        getTestResource().getAsShort();
+        verifyCreateRandomDependencies();
     }
 
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("random", this.random)
-                .toString();
-    }
 }

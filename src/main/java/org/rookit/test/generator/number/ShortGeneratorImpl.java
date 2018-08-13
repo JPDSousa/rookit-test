@@ -19,29 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test.generator;
+package org.rookit.test.generator.number;
 
 import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
+import org.rookit.test.generator.AbstractGenerator;
 
 import java.util.Random;
 
-final class ByteArrayGenerator extends AbstractGenerator<byte[]> {
-
-    private static final short MAX_BYTES = 128;
+final class ShortGeneratorImpl extends AbstractGenerator<Short> implements ShortGenerator {
 
     private final Random random;
 
     @Inject
-    ByteArrayGenerator(final Random random) {
+    ShortGeneratorImpl(final Random random) {
         this.random = random;
     }
 
+    @SuppressWarnings("AutoBoxing")
     @Override
-    public byte[] createRandom() {
-        final byte[] bytes = new byte[MAX_BYTES];
-        this.random.nextBytes(bytes);
-        return bytes;
+    public Short createRandom() {
+        return createRandomShort();
+    }
+
+    @SuppressWarnings("NumericCastThatLosesPrecision")
+    @Override
+    public short createRandomShort() {
+        return (short) this.random.nextInt(Short.MAX_VALUE);
+    }
+
+    @Override
+    public short getAsShort() {
+        return createRandomShort();
     }
 
     @Override

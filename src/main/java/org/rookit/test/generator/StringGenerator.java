@@ -22,17 +22,18 @@
 package org.rookit.test.generator;
 
 import com.devskiller.jfairy.Fairy;
+import com.google.common.base.MoreObjects;
 import com.google.inject.Inject;
 
-class StringGenerator extends AbstractGenerator<String> {
+final class StringGenerator extends AbstractGenerator<String> {
 
     private static final short MAX_WORDS = 10;
 
     private final Fairy fairy;
 
     @Inject
-    private StringGenerator() {
-        this.fairy = Fairy.create();
+    StringGenerator(final Fairy fairy) {
+        this.fairy = fairy;
     }
 
     @Override
@@ -40,4 +41,10 @@ class StringGenerator extends AbstractGenerator<String> {
         return this.fairy.textProducer().sentence(MAX_WORDS);
     }
 
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("fairy", this.fairy)
+                .toString();
+    }
 }

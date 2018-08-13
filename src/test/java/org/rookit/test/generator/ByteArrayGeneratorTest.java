@@ -21,12 +21,29 @@
  ******************************************************************************/
 package org.rookit.test.generator;
 
+import org.rookit.test.AbstractUnitTest;
+import org.rookit.test.junit.categories.UnitTest;
+
+import java.util.Random;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 @SuppressWarnings("javadoc")
-public class ByteArrayGeneratorTest extends AbstractGeneratorTest<ByteArrayGenerator> {
+@UnitTest
+public class ByteArrayGeneratorTest extends AbstractUnitTest<ByteArrayGenerator>
+        implements GeneratorTest<ByteArrayGenerator> {
+
+    private final Random random = mock(Random.class);
 
     @Override
-    protected Class<ByteArrayGenerator> getTestClass() {
-        return ByteArrayGenerator.class;
+    protected ByteArrayGenerator doCreateTestResource() {
+        return new ByteArrayGenerator(this.random);
     }
 
+    @Override
+    public void verifyCreateRandomDependencies() {
+        verify(this.random).nextBytes(any());
+    }
 }

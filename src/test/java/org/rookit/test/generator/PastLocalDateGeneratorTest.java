@@ -21,27 +21,47 @@
  ******************************************************************************/
 package org.rookit.test.generator;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.rookit.test.AbstractUnitTest;
+import org.rookit.test.junit.categories.UnitTest;
+import org.rookit.test.generator.number.IntegerGenerator;
 
-import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 
-import org.junit.jupiter.api.RepeatedTest;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("javadoc")
-public class PastLocalDateGeneratorTest extends AbstractGeneratorTest<PastLocalDateGenerator> {
+@UnitTest
+public class PastLocalDateGeneratorTest extends AbstractUnitTest<PastLocalDateGenerator>
+        implements GeneratorTest<PastLocalDateGenerator> {
 
-    @RepeatedTest(CONFIDENCE_THRESHOLD)
-    public final void testCreatedDateIsInPast() {
-        final LocalDate date = this.testResource.createRandom();
+    private static final int YEAR_MIN = 1700;
+    private static final int YEAR_MAX = 1800;
+    private static final int YEAR = 1750;
+    public static final Month MONTH = Month.APRIL;
 
-        assertThat(date)
-                .as("The generated date")
-                .isBefore(LocalDate.now());
+    private final IntegerGenerator integerGenerator = mock(IntegerGenerator.class);
+    private final Generator<Month> monthGenerator = mock(Generator.class);
+
+    @Override
+    protected void setupAttributes() {
+        super.setupAttributes();
+        when(this.integerGenerator.createRandomInteger(YEAR_MIN, YEAR_MAX)).thenReturn(YEAR);
+        when(this.monthGenerator.createRandom()).thenReturn(MONTH);
     }
 
     @Override
-    protected Class<PastLocalDateGenerator> getTestClass() {
-        return PastLocalDateGenerator.class;
+    protected PastLocalDateGenerator doCreateTestResource() {
+        return new PastLocalDateGenerator(this.integerGenerator, this.monthGenerator, YEAR_MIN);
     }
 
+    @Override
+    public void verifyCreateRandomDependencies() {
+        // creates year
+        verify(this.integerGenerator).createRandomInteger(YEAR_MIN, YEAR_MAX);
+        // creates month
+        verify(this.monthGenerator).createRandom();
+        //creates day
+        verify(this.integerGenerator).createRandomInteger(1, MONTH.length(Year.isLeap(YEAR)));
+    }
 }

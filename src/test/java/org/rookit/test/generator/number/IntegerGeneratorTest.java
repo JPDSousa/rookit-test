@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2018 Joao Sousa
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,25 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test.generator;
+package org.rookit.test.generator.number;
 
-import com.google.inject.Inject;
+import org.junit.jupiter.api.Test;
+import org.rookit.test.generator.GeneratorTest;
 
-import java.util.Random;
+public interface IntegerGeneratorTest<T extends IntegerGenerator> extends GeneratorTest<T> {
 
-class DoubleGenerator extends AbstractGenerator<Double> {
-
-    private final Random random;
-
-    @Inject
-    private DoubleGenerator(final Random random) {
-        super();
-        this.random = random;
+    @Test
+    default void testCreateRandomInteger() {
+        getTestResource().createRandomInteger();
+        verifyCreateRandomDependencies();
     }
 
-    @Override
-    public Double createRandom() {
-        return new Double(this.random.nextDouble());
+    @Test
+    default void testGetAsInteger() {
+        getTestResource().getAsInt();
+        verifyCreateRandomDependencies();
     }
-
 }

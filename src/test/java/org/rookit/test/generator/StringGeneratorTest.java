@@ -21,11 +21,17 @@
  ******************************************************************************/
 package org.rookit.test.generator;
 
-class StringGeneratorTest extends AbstractGeneratorTest<StringGenerator> {
+import com.devskiller.jfairy.Fairy;
+import org.rookit.test.AbstractUnitTest;
+
+import static org.mockito.Mockito.mock;
+
+class StringGeneratorTest extends AbstractUnitTest<StringGenerator> {
+
+    private final Fairy fairy = mock(Fairy.class);
 
     @Override
-    protected Class<StringGenerator> getTestClass() {
-        return StringGenerator.class;
+    protected StringGenerator doCreateTestResource() {
+        return new StringGenerator(this.fairy);
     }
-
 }

@@ -23,24 +23,20 @@ package org.rookit.test.generator;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Sets;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.annotation.Generated;
-
 import org.apache.logging.log4j.Logger;
 import org.rookit.test.TestValidator;
+import org.rookit.utils.log.validator.Validator;
+
+import javax.annotation.Generated;
+import java.security.SecureRandom;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("javadoc")
 public abstract class AbstractGenerator<T> implements Generator<T> {
 
-    protected static final TestValidator VALIDATOR = TestValidator.getSingleton();
+    protected static final Validator VALIDATOR = TestValidator.getSingleton();
 
     /**
      * Logger for AbstractGenerator.
@@ -49,7 +45,7 @@ public abstract class AbstractGenerator<T> implements Generator<T> {
 
     private static final int MAX_SIZE = 10;
 
-    private final Random random = new Random();
+    private final Random random = new SecureRandom();
 
     @Override
     public List<T> createRandomList() {
@@ -67,6 +63,7 @@ public abstract class AbstractGenerator<T> implements Generator<T> {
 
     @Override
     public T createRandomUnique(final T item) {
+        VALIDATOR.checkArgument().isNotNull(item, "item");
         return Stream.generate(this::createRandom)
                 .filter(generated -> !Objects.equals(item, generated))
                 .limit(MAX_SIZE)
@@ -77,6 +74,7 @@ public abstract class AbstractGenerator<T> implements Generator<T> {
 
     @Override
     public Set<T> createRandomUniqueSet(final Collection<T> items) {
+        VALIDATOR.checkArgument().isNotNull(items, "items");
         final Set<T> uniqueSet = Sets.newHashSetWithExpectedSize(items.size());
         while (uniqueSet.size() < items.size()) {
             final T item = createRandom();

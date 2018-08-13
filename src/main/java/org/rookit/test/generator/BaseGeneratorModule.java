@@ -21,71 +21,67 @@
  ******************************************************************************/
 package org.rookit.test.generator;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
+import com.google.inject.util.Modules;
+import org.rookit.test.generator.enumeration.EnumGeneratorFactory;
+import org.rookit.test.generator.enumeration.EnumGeneratorModule;
+import org.rookit.test.generator.guice.Past;
+import org.rookit.test.generator.number.NumberGeneratorModule;
 
+import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Random;
 
 @SuppressWarnings("javadoc")
-public class BaseGeneratorModule extends AbstractModule {
+public final class BaseGeneratorModule extends AbstractModule {
 
+    private static final Module MODULE = Modules.combine(new BaseGeneratorModule(),
+            NumberGeneratorModule.getModule(),
+            EnumGeneratorModule.getModule());
+
+    public static Module getModule() {
+        return MODULE;
+    }
+
+    private BaseGeneratorModule() {}
+
+    @SuppressWarnings({"AnonymousInnerClassMayBeStatic", "AnonymousInnerClass", "EmptyClass"})
     @Override
     protected void configure() {
-        bind(Random.class).toInstance(new Random());
+        bind(Random.class).toInstance(new SecureRandom());
         
         bind(new TypeLiteral<Generator<String>>() {
             }).to(StringGenerator.class).in(Singleton.class);
         bind(StringGenerator.class).in(Singleton.class);
         
         bind(new TypeLiteral<Generator<Boolean>>() {
-            }).to(BooleanGenerator.class).in(Singleton.class);
-        bind(BooleanGenerator.class).in(Singleton.class);
+            }).to(BooleanGeneratorImpl.class).in(Singleton.class);
+        bind(BooleanGeneratorImpl.class).in(Singleton.class);
         
         bind(new TypeLiteral<Generator<byte[]>>() {
             }).to(ByteArrayGenerator.class).in(Singleton.class);
         bind(ByteArrayGenerator.class).in(Singleton.class);
         
-        bindNumeric();
-        
         bindTime();
     }
 
+    @SuppressWarnings({"AnonymousInnerClassMayBeStatic", "AnonymousInnerClass", "EmptyClass"})
     private void bindTime() {
         bind(new TypeLiteral<Generator<Duration>>() {
             }).to(DurationGenerator.class).in(Singleton.class);
         bind(DurationGenerator.class).in(Singleton.class);
         
-        bind(new TypeLiteral<Generator<LocalDate>>() {
-        }).to(PastLocalDateGenerator.class).in(Singleton.class);
-        bind(PastLocalDateGenerator.class).in(Singleton.class);
-    }
-
-    private void bindNumeric() {
-        bind(new TypeLiteral<Generator<Short>>() {
-        }).to(ShortGenerator.class).in(Singleton.class);
-        bind(ShortGenerator.class).in(Singleton.class);
-        
-        bind(new TypeLiteral<Generator<Double>>() {
-            }).to(DoubleGenerator.class).in(Singleton.class);
-        bind(DoubleGenerator.class).in(Singleton.class);
-        
-        bind(new TypeLiteral<Generator<Integer>>() {
-        }).to(IntegerGenerator.class).in(Singleton.class);
-        bind(IntegerGenerator.class).in(Singleton.class);
-        
-        bind(new TypeLiteral<Generator<Long>>() {
-        }).to(PositiveLongGenerator.class).in(Singleton.class);
-        bind(PositiveLongGenerator.class).in(Singleton.class);
+        bind(new TypeLiteral<Generator<LocalDate>>() {}).annotatedWith(Past.class).to(PastLocalDateGenerator.class)
+                .in(Singleton.class);
+        bind(PastLocalDateGenerator.class).annotatedWith(Past.class).in(Singleton.class);
     }
     
+    @SuppressWarnings("MethodMayBeStatic")
     @Provides
-    private Generator<Month> getMonthGenerator(final Random random) {
-        return new EnumGenerator<>(random, Month.class);
+    private Generator<Month> getMonthGenerator(final EnumGeneratorFactory enumFactory) {
+        return enumFactory.create(Month.class);
     }
 
 }

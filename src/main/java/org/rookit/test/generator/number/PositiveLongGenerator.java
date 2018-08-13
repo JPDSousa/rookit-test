@@ -19,24 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package org.rookit.test.generator;
+package org.rookit.test.generator.number;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.common.base.MoreObjects;
+import com.google.inject.Inject;
+import org.rookit.test.generator.AbstractGenerator;
 
-import org.rookit.test.AbstractUnitTest;
-import org.rookit.test.SingletonTest;
+import java.util.Random;
 
-abstract class AbstractGeneratorTest<T extends Generator<?>> extends AbstractUnitTest<T> implements SingletonTest<T> {
+final class PositiveLongGenerator extends AbstractGenerator<Long> implements LongGenerator {
 
-    protected static final short CONFIDENCE_THRESHOLD = 10;
-    private static final Injector INJECTOR = Guice.createInjector(new BaseGeneratorModule());
-    
-    protected abstract Class<T> getTestClass();
-    
-    @Override
-    public T createTestResource() {
-        return INJECTOR.getInstance(getTestClass());
+    private final Random random;
+
+    @Inject
+    PositiveLongGenerator(final Random random) {
+        this.random = random;
     }
 
+    @SuppressWarnings("AutoBoxing")
+    @Override
+    public Long createRandom() {
+        return createRandomLong();
+    }
+
+    @Override
+    public long createRandomLong() {
+        return Math.abs(this.random.nextLong());
+    }
+
+    @Override
+    public long getAsLong() {
+        return createRandomLong();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("random", this.random)
+                .toString();
+    }
 }
