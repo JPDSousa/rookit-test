@@ -11,7 +11,7 @@
         <version>-SNAPSHOT</version>
     </parent>
 
-    <groupId>${rookit.group}.rookit-test</groupId>
+    <groupId>com.github.JPDSousa.rookit-test</groupId>
     <artifactId>rookit-test</artifactId>
 
     <name>Rookit Test</name>
