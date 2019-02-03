@@ -11,8 +11,7 @@
         <version>-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.github.JPDSousa.rookit-test</groupId>
-
+    <groupId>${rookit.group}.rookit-test</groupId>
     <artifactId>rookit-test</artifactId>
 
     <name>Rookit Test</name>
@@ -23,10 +22,6 @@
         <module>generator</module>
         <module>injector</module>
     </modules>
-
-    <properties>
-        <junit.jupiter.version>5.1.1</junit.jupiter.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -44,7 +39,7 @@
             <dependency>
                 <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-grapher</artifactId>
-                <version>4.2.0</version>
+                <version>${guice.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.tngtech.archunit</groupId>
