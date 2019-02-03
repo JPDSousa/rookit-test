@@ -15,11 +15,6 @@
 
     <name>Rookit Test Runner</name>
 
-    <properties>
-        <mockito.version>2.24.0</mockito.version>
-        <junit.extensions.version>2.3.0</junit.extensions.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${rookit.group}.rookit-test</groupId>
