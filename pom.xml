@@ -24,7 +24,7 @@
     </modules>
 
     <properties>
-        <archunit.version>0.9.3</archunit.version>
+        <archunit.version>0.10.1</archunit.version>
     </properties>
 
     <dependencies>
