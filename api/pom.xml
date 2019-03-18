@@ -16,7 +16,7 @@
     <name>Rookit Test API</name>
 
     <properties>
-        <assertj.version>3.12.1</assertj.version>
+        <assertj.version>3.12.2</assertj.version>
     </properties>
 
     <dependencies>
