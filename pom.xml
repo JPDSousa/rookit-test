@@ -41,11 +41,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.google.inject.extensions</groupId>
-                <artifactId>guice-grapher</artifactId>
-                <version>${guice.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.tngtech.archunit</groupId>
                 <artifactId>archunit</artifactId>
                 <version>${archunit.version}</version>
